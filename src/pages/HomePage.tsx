@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "@api/api";
-import { div } from "framer-motion/client";
+import { useContext } from "react";
+import { ThemeContext } from "@context/theme.context";
 
 export default function HomePage() {
+  const { isDark } = useContext(ThemeContext);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
@@ -16,6 +19,10 @@ export default function HomePage() {
   if (data && data.response) {
     console.log("data", data.response.results);
   }
+
+  const dynamicBgStyle = {
+    backgroundColor: isDark ? "black" : "white",
+  };
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading users</p>;
@@ -31,7 +38,10 @@ export default function HomePage() {
           <span className="font-bold">tips</span>.
         </h1>
       </div>
-      <div className="h-0.5 w-screen absolute left-0 mt-10 bg-white"></div>
+      <div
+        className="h-0.5 w-screen absolute left-0 mt-10 "
+        style={dynamicBgStyle}
+      ></div>
       {/* Latest News */}
       <div className="flex gap-5 mt-20 h-[525px] w-full">
         {/* Leva strana */}
@@ -43,7 +53,9 @@ export default function HomePage() {
                 alt=""
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-0 p-3 font-semibold text-xl bg-gray-500/20 w-full backdrop-blur-3xl ">
+              <div
+                className="absolute bottom-0 p-3 font-semibold text-xl bg-gray-500/20 w-full backdrop-blur-3xl text-white"
+              >
                 {data.response.results[0].fields.headline}
               </div>
             </>
@@ -60,7 +72,9 @@ export default function HomePage() {
                   alt=""
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-0 p-3 font-semibold text-xl bg-gray-500/20 w-full backdrop-blur-3xl">
+                <div
+                  className="absolute bottom-0 p-3 font-semibold text-xl bg-gray-500/20 w-full backdrop-blur-3xl text-white"
+                >
                   {data.response.results[1].fields.headline}
                 </div>
               </>
@@ -74,7 +88,9 @@ export default function HomePage() {
                   alt=""
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-0 p-3 font-semibold text-xl bg-gray-500/20 w-full backdrop-blur-3xl">
+                <div
+                  className="absolute bottom-0 p-3 font-semibold text-xl bg-gray-500/20 w-full backdrop-blur-3xl text-white"
+                >
                   {data.response.results[2].fields.headline}
                 </div>
               </>

@@ -1,16 +1,11 @@
-import { createContext } from 'react'
-import { theme } from 'antd'
+import { createContext } from "react";
 
 interface ThemeContextType {
-  isDark: boolean
-  toggleTheme: () => void
-  algorithm: typeof theme.darkAlgorithm | typeof theme.defaultAlgorithm
-  colorPrimary: string
+  isDark: boolean;
+  toggleTheme: () => void;
 }
 
 export const ThemeContext = createContext<ThemeContextType>({
   isDark: false,
   toggleTheme: () => {},
-  algorithm: theme.defaultAlgorithm,
-  colorPrimary: '#1677ff',
-})
+});
