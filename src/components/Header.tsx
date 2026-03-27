@@ -9,7 +9,7 @@ export default function Header() {
   const location = useLocation();
   return (
     <div
-      className={`w-full h-20 border-b-2 border-[#1677FF] transition duration-200 ${isDark ? "bg-white text-black" : "bg-[#1b1d21] text-white"} flex justify-center text-lg`}
+      className={`w-full h-20 fixed z-99 border-b-2 border-[#1677FF] transition duration-200 ${isDark ? "bg-white text-black" : "bg-[#1b1d21] text-white"} max-w-[1400px] text-lg`}
     >
       <div className="w-[1400px] h-full flex justify-between items-center">
         <div className="flex gap-10 items-baseline">
@@ -41,7 +41,7 @@ export default function Header() {
             }
             unCheckedChildren={
               <FaMoon
-                style={{ display: "block", marginTop: "1px" }}
+                style={{ display: "block", marginTop: "1px", marginLeft: "2px", color:"#1677FF" }}
                 className="scale-120"
               />
             }

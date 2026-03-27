@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div
-      className={`w-screen h-screen overflow-hidden overflow-y-auto flex justify-center transition duration-200 ${isDark ? "bg-white text-black" : "bg-[#1b1d21] text-white"}`}
+      className={`w-screen max-h-screen overflow-hidden overflow-y-auto flex justify-center transition duration-200 pb-10 ${isDark ? "bg-white text-black" : "bg-[#1b1d21] text-white"}`}
     >
       <Routes>
         <Route path="/" element={<PageLayout />}>
