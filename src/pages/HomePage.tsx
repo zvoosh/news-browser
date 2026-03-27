@@ -31,8 +31,8 @@ export default function HomePage() {
     },
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading users</p>;
+  if (isLoading) return <div className="w-full h-screen flex justify-center items-center"><Spin/></div>;
+  if (isError) return <div className="w-full h-screen flex justify-center items-center">Error loading news</div>;
 
   const allResults = data?.pages.flatMap((page) => page.response.results) ?? [];
 
