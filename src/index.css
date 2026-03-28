@@ -10,7 +10,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1677FF;
+    background: #1677ff;
     border-radius: 2px;
   }
 
@@ -18,4 +18,8 @@
     background: #81b3f8;
     cursor: pointer;
   }
+}
+
+body {
+  background: #1b1d21;
 }

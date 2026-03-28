@@ -1,17 +1,47 @@
 import api from "@api/api";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { ThemeContext } from "@context/theme.context";
 import type { Article, GuardianResponse } from "../types/types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { Button, DatePicker, Select, Spin } from "antd";
 import NewsCard from "@components/NewsCard";
 import LatestThreeNews from "@components/LatestThreeNews";
 import Search from "antd/es/input/Search";
 import type { Dayjs } from "dayjs";
 
+const sectionOptions = [
+  { value: "technology", label: "Technology" },
+  { value: "sport", label: "Sport" },
+  { value: "business", label: "Business" },
+  { value: "culture", label: "Culture" },
+  { value: "science", label: "Science" },
+  { value: "world", label: "World" },
+];
+
+const SectionPicker = ({
+  section,
+  onChange,
+}: {
+  section: string;
+  onChange: (value: string) => void;
+}) => {
+  return (
+    <Select
+      className="w-1/4"
+      placeholder="Select section"
+      options={sectionOptions}
+      defaultValue={section}
+      onChange={onChange}
+    />
+  );
+};
+const selectArticles = (data: InfiniteData<GuardianResponse>) =>
+  data.pages.flatMap((page) => page.response.results);
+
 export default function HomePage() {
   const [from, setFrom] = useState<Dayjs | null>(null);
   const [to, setTo] = useState<Dayjs | null>(null);
+  const [section, setSection] = useState<string>("world");
 
   const { isDark } = useContext(ThemeContext);
 
@@ -23,10 +53,10 @@ export default function HomePage() {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<GuardianResponse, Error, Article[]>({
-    queryKey: ["users"],
+    queryKey: ["users", section],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await api.get(
-        `search?q=climate&show-fields=body,headline,byline,thumbnail&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=13`,
+        `search?section=${section}&show-fields=body,headline,byline,thumbnail&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=13`,
       );
       return res.data;
     },
@@ -34,14 +64,26 @@ export default function HomePage() {
     getNextPageParam: (lastPage, allPages) => {
       return allPages.length + 1;
     },
-    select: (data) => data.pages.flatMap((page) => page.response.results),
+    select: selectArticles,
   });
+
+  console.log("render")
+
+  const firstThree = useMemo(() => data?.slice(0, 3), [data]);
+  const rest = useMemo(() => data?.slice(3), [data]);
+
+  const handleSectionChange = useCallback((value: string) => {
+    setSection(value);
+  }, []);
+
+  const dynamicBgStyle = useMemo(
+    () => ({ backgroundColor: isDark ? "black" : "white" }),
+    [isDark],
+  );
 
   if (isLoading)
     return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <Spin />
-      </div>
+      <div className="w-full h-screen flex justify-center items-center"></div>
     );
   if (isError)
     return (
@@ -49,13 +91,6 @@ export default function HomePage() {
         Error loading news
       </div>
     );
-
-  const firstThree = data?.slice(0, 3);
-  const rest = data?.slice(3);
-
-  const dynamicBgStyle = {
-    backgroundColor: isDark ? "black" : "white",
-  };
 
   return (
     <div className="w-full h-full pt-30">
@@ -91,7 +126,7 @@ export default function HomePage() {
         <div className="w-full p-5 bg-gray-400/50 rounded-xl mt-5 space-y-3">
           <p className="font-semibold">Filters</p>
           <div className="flex gap-3">
-            <Select placeholder="Dropdown" className="w-1/4" />
+            <SectionPicker section={section} onChange={handleSectionChange} />
             <Select placeholder="Sorting" className="w-1/4" />
             <DatePicker
               value={from}
@@ -113,7 +148,8 @@ export default function HomePage() {
       </div>
       {/* All Other News */}
       <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
-        {rest && rest.map((item) => <NewsCard item={item} />)}
+        {rest &&
+          rest.map((item, index) => <NewsCard item={item} key={index} />)}
       </div>
       {/* Load more Button */}
       <div className="w-full flex justify-center mt-10">

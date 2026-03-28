@@ -9,8 +9,8 @@ import { ThemeProvider } from "@context/theme.provider.tsx";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minuta
-      retry: 1,
+      staleTime: 1000 * 60 * 5,
+      retry: 0,
     },
   },
 });
