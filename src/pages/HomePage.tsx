@@ -3,7 +3,7 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import { ThemeContext } from "@context/theme.context";
 import type { Article, GuardianResponse } from "../types/types";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import { Button, DatePicker, Select, Spin } from "antd";
+import { Button, DatePicker, Select, Skeleton, Spin } from "antd";
 import NewsCard from "@components/NewsCard";
 import LatestThreeNews from "@components/LatestThreeNews";
 import Search from "antd/es/input/Search";
@@ -67,7 +67,7 @@ export default function HomePage() {
     select: selectArticles,
   });
 
-  console.log("render")
+  console.log("render");
 
   const firstThree = useMemo(() => data?.slice(0, 3), [data]);
   const rest = useMemo(() => data?.slice(3), [data]);
@@ -80,17 +80,6 @@ export default function HomePage() {
     () => ({ backgroundColor: isDark ? "black" : "white" }),
     [isDark],
   );
-
-  if (isLoading)
-    return (
-      <div className="w-full h-screen flex justify-center items-center"></div>
-    );
-  if (isError)
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        Error loading news
-      </div>
-    );
 
   return (
     <div className="w-full h-full pt-30">
@@ -108,8 +97,18 @@ export default function HomePage() {
         className="h-0.25 w-full relative left-0 mt-10 "
         style={dynamicBgStyle}
       ></div>
-      {/* Latest Three News */}
-      <LatestThreeNews items={firstThree} />
+      {/* Latest Three News */}{" "}
+      {isLoading ? (
+        <div className="flex justify-center items-center min-h-[525px] lg:h-[525px] mt-20">
+          <Skeleton active />
+        </div>
+      ) : isError ? (
+        <div className="flex justify-center items-center h-40">
+          Error loading news
+        </div>
+      ) : (
+        <LatestThreeNews items={firstThree} />
+      )}
       {/* Divider */}
       <div
         className="h-0.25 w-full relative left-0 mt-10"
@@ -147,10 +146,17 @@ export default function HomePage() {
         </div>
       </div>
       {/* All Other News */}
-      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
-        {rest &&
-          rest.map((item, index) => <NewsCard item={item} key={index} />)}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-40">
+          <Skeleton active />
+        </div>
+      ) : (
+        <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
+          {rest?.map((item, index) => (
+            <NewsCard item={item} key={index} />
+          ))}
+        </div>
+      )}
       {/* Load more Button */}
       <div className="w-full flex justify-center mt-10">
         {isFetchingNextPage ? (
