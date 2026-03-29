@@ -55,12 +55,11 @@ export default function BookmarkPage() {
         </div>
       </div>
       {/* All Other News */}
-      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
+      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 pl-5">
         {data?.map((item, index) => (
           <NewsCard
             item={item}
             key={index}
-            className={index === data.length - 1 ? "mr-auto" : ""}
           />
         ))}
       </div>

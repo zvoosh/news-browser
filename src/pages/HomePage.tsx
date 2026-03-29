@@ -120,13 +120,9 @@ export default function HomePage() {
         </div>
       </div>
       {/* All Other News */}
-      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
+      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 pl-5">
         {rest?.map((item, index) => (
-          <NewsCard
-            item={item}
-            key={item.id}
-            className={index === rest.length - 1 ? "mr-auto" : ""}
-          />
+          <NewsCard item={item} key={index} />
         ))}
       </div>
       {/* Load more Button */}

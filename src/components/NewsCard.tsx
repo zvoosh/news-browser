@@ -8,10 +8,8 @@ import { ThemeContext } from "@context";
 
 export default function NewsCard({
   item,
-  className = "",
 }: {
   item: Article;
-  className: string;
 }) {
   const { bookmarks, addBookmark, removeBookmark } =
     useContext(BookmakrsContext);
@@ -19,7 +17,7 @@ export default function NewsCard({
   const { isLight } = useContext(ThemeContext);
   return (
     <div
-      className={`flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center ${className}`}
+      className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center"
     >
       <div className="min-w-[275px] md:w-[275px] max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0">
         {item.fields.thumbnail ? (
