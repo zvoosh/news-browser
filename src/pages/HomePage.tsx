@@ -2,7 +2,6 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import type { Dayjs } from "dayjs";
 import { Button, Spin } from "antd";
-import Search from "antd/es/input/Search";
 import {
   FromDatePicker,
   LatestThreeNews,
@@ -10,6 +9,7 @@ import {
   OrderPicker,
   SectionPicker,
   ToDatePicker,
+  SearchBar,
 } from "@components";
 import type { Article, GuardianResponse } from "@types";
 import { ThemeContext } from "@context";
@@ -20,6 +20,7 @@ const selectArticles = (data: InfiniteData<GuardianResponse>) =>
 
 export default function HomePage() {
   const [from, setFrom] = useState<Dayjs | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [to, setTo] = useState<Dayjs | null>(null);
   const [section, setSection] = useState<string>("world");
   const [order, setOrder] = useState<string>("newest");
@@ -28,10 +29,10 @@ export default function HomePage() {
 
   const { data, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<GuardianResponse, Error, Article[]>({
-      queryKey: ["users", section, order, from, to],
+      queryKey: ["users", section, order, from, to, searchTerm],
       queryFn: async ({ pageParam = 1 }) => {
         const res = await api.get(
-          `search?section=${section}&show-fields=body,headline,byline,thumbnail&order-by=${order}${from ? `&from-date=${from.format("YYYY-MM-DD")}` : ""}${to ? `&to-date=${to.format("YYYY-MM-DD")}` : ""}&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=13`,
+          `search?q=${encodeURIComponent(searchTerm)}&section=${section}&show-fields=body,headline,byline,thumbnail&order-by=${order}${from ? `&from-date=${from.format("YYYY-MM-DD")}` : ""}${to ? `&to-date=${to.format("YYYY-MM-DD")}` : ""}&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=13`,
         );
         return res.data;
       },
@@ -98,13 +99,13 @@ export default function HomePage() {
       ></div>
       {/* Filters */}
       <div className="flex gap-5 w-full">
-        <div className="w-[800px] p-5 bg-gray-400/50 rounded-xl mt-5 space-y-3">
+        <div className="w-[800px] p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3">
           <p className="font-semibold">Search the website for news</p>
           <div>
-            <Search placeholder="Search..." />
+            <SearchBar onSearch={setSearchTerm} />
           </div>
         </div>
-        <div className="w-full p-5 bg-gray-400/50 rounded-xl mt-5 space-y-3">
+        <div className="w-full p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3">
           <p className="font-semibold">Filters</p>
           <div className="flex gap-3">
             <SectionPicker section={section} onChange={handleSectionChange} />
