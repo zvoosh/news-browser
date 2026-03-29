@@ -6,11 +6,11 @@ import { ThemeContext } from "@context/theme.context";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isDark, toggleTheme } = useContext(ThemeContext);
+  const { isLight, toggleTheme } = useContext(ThemeContext);
   const location = useLocation();
   return (
     <div
-      className={`w-full h-20 fixed z-99 border-b-2 border-[#1677FF] transition duration-200 ${isDark ? "bg-white text-black" : "bg-[#1b1d21] text-white"} max-w-[1400px] text-lg`}
+      className={`w-full h-20 fixed z-99 border-b-2 border-[#1677FF] transition duration-200 ${isLight ? "bg-white text-black" : "bg-[#1b1d21] text-white"} max-w-[1400px] text-lg`}
     >
       <div className="w-full max-w-[1400px] h-full flex justify-between items-baseline px-5 pt-3.5">
         <div className="flex gap-10 items-baseline">
@@ -20,13 +20,13 @@ export default function Header() {
           <div className="lg:flex gap-5 text-xl hidden">
             <Link
               to={"/"}
-              className={`px-2 py-1 rounded-md ${isDark ? (location.pathname === "/" ? "border-white bg-black text-white" : "") : location.pathname === "/" ? "border-gray-800 bg-white text-gray-800" : ""}`}
+              className={`px-2 py-1 rounded-md ${isLight ? (location.pathname === "/" ? "border-white bg-black text-white" : "") : location.pathname === "/" ? "border-gray-800 bg-white text-gray-800" : ""}`}
             >
               Home
             </Link>
             <Link
               to={"/bookmarks"}
-              className={`px-2 py-1 rounded-md ${isDark ? (location.pathname === "/bookmarks" ? "border-white bg-black text-white" : "") : location.pathname === "/bookmarks" ? "border-gray-800 bg-white text-gray-800" : ""}`}
+              className={`px-2 py-1 rounded-md ${isLight ? (location.pathname === "/bookmarks" ? "border-white bg-black text-white" : "") : location.pathname === "/bookmarks" ? "border-gray-800 bg-white text-gray-800" : ""}`}
             >
               Bookmarks
             </Link>
@@ -45,13 +45,13 @@ export default function Header() {
             <div className="flex flex-col gap-4 items-center">
               <Link
                 to={"/"}
-                className={`w-full max-w-[300px] px-2 py-1 rounded-md ${isDark ? (location.pathname === "/" ? "border-white bg-black text-white" : "") : location.pathname === "/" ? "border-gray-800 bg-white text-gray-800" : ""}`}
+                className={`w-full max-w-[300px] px-2 py-1 rounded-md ${isLight ? (location.pathname === "/" ? "border-white bg-black text-white" : "") : location.pathname === "/" ? "border-gray-800 bg-white text-gray-800" : ""}`}
               >
                 Home
               </Link>
               <Link
                 to={"/bookmarks"}
-                className={`w-full max-w-[300px] px-2 py-1 rounded-md ${isDark ? (location.pathname === "/bookmarks" ? "border-white bg-black text-white" : "") : location.pathname === "/bookmarks" ? "border-gray-800 bg-white text-gray-800" : ""}`}
+                className={`w-full max-w-[300px] px-2 py-1 rounded-md ${isLight ? (location.pathname === "/bookmarks" ? "border-white bg-black text-white" : "") : location.pathname === "/bookmarks" ? "border-gray-800 bg-white text-gray-800" : ""}`}
               >
                 Bookmarks
               </Link>
@@ -80,7 +80,7 @@ export default function Header() {
                 className="scale-120"
               />
             }
-            checked={isDark}
+            checked={isLight}
             onChange={toggleTheme}
           />
         </div>

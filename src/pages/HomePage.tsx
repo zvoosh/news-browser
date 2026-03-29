@@ -25,7 +25,7 @@ export default function HomePage() {
   const [section, setSection] = useState<string>("world");
   const [order, setOrder] = useState<string>("newest");
 
-  const { isDark } = useContext(ThemeContext);
+  const { isLight } = useContext(ThemeContext);
 
   const { data, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<GuardianResponse, Error, Article[]>({
@@ -61,8 +61,8 @@ export default function HomePage() {
   }, []);
 
   const dynamicBgStyle = useMemo(
-    () => ({ backgroundColor: isDark ? "black" : "white" }),
-    [isDark],
+    () => ({ backgroundColor: isLight ? "black" : "white" }),
+    [isLight],
   );
 
   if (isError) {
@@ -100,7 +100,7 @@ export default function HomePage() {
       {/* Filters */}
       <div className="flex gap-5 w-full">
         <div
-          className={`w-[800px] p-5 ${isDark ? "bg-[#1677FF]" : "bg-[#1677FF]/80"} text-white rounded-xl mt-5 space-y-3`}
+          className={`w-[800px] p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Search the website for news</p>
           <div>
@@ -108,7 +108,7 @@ export default function HomePage() {
           </div>
         </div>
         <div
-          className={`w-full p-5 ${isDark ? "bg-[#1677FF]" : "bg-[#1677FF]/80"} text-white rounded-xl mt-5 space-y-3`}
+          className={`w-full p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Filters</p>
           <div className="flex gap-3">
@@ -122,7 +122,11 @@ export default function HomePage() {
       {/* All Other News */}
       <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
         {rest?.map((item, index) => (
-          <NewsCard item={item} key={index} />
+          <NewsCard
+            item={item}
+            key={item.id}
+            className={index === rest.length - 1 ? "mr-auto" : ""}
+          />
         ))}
       </div>
       {/* Load more Button */}

@@ -31,8 +31,6 @@ export default function BookmarkPage() {
     enabled: bookmarks.length > 0,
   });
 
-  console.log("searchTerm", searchTerm);
-
   if (isError) {
     return (
       <div className="w-full h-full text-white flex justify-center items-center mt-20">
@@ -56,7 +54,7 @@ export default function BookmarkPage() {
       {/* All Other News */}
       <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
         {data?.map((item, index) => (
-          <NewsCard item={item} key={index} />
+          <NewsCard item={item} key={index} className={index === data.length - 1 ? "mr-auto" : ""}/>
         ))}
       </div>
     </div>

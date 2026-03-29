@@ -4,15 +4,22 @@ import TruncateParagraph from "./TruncateParagraph";
 import dayjs from "dayjs";
 import { useContext } from "react";
 import { BookmakrsContext } from "@context/bookmarks.context";
+import { ThemeContext } from "@context";
 
-export default function NewsCard({ item }: { item: Article }) {
+export default function NewsCard({
+  item,
+  className = "",
+}: {
+  item: Article;
+  className: string;
+}) {
   const { bookmarks, addBookmark, removeBookmark } =
     useContext(BookmakrsContext);
 
+  const { isLight } = useContext(ThemeContext);
   return (
     <div
-      key={item.id}
-      className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center"
+      className={`flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center ${className}`}
     >
       <div className="min-w-[275px] md:w-[275px] max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0">
         {item.fields.thumbnail ? (
@@ -41,7 +48,7 @@ export default function NewsCard({ item }: { item: Article }) {
           </div>
           <div>
             <FaBookmark
-              color={`${bookmarks.includes(item.id) ? "yellow" : "gray"}`}
+              color={`${bookmarks.includes(item.id) ? `${isLight ? "red" : "yellow" }` : "gray"}`}
               className="cursor-pointer"
               onClick={() =>
                 bookmarks.includes(item.id)
