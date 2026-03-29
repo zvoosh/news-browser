@@ -1,19 +1,29 @@
 export interface ArticleFields {
-  body: string;
   headline: string;
-  byline: string;
-  thumbnail: string;
+  body: string;
+  thumbnail?: string;
+  byline?: string;
 }
 
 export interface Article {
   id: string;
-  webTitle: string;
+  type: string;
+  sectionId: string;
+  sectionName: string;
   webPublicationDate: string;
+  webTitle: string;
   fields: ArticleFields;
 }
 
 export interface GuardianResponse {
   response: {
+    status: string;
+    userTier: string;
+    total: number;
+    startIndex: number;
+    pageSize: number;
+    currentPage: number;
+    pages: number;
     results: Article[];
   };
 }

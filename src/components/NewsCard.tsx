@@ -35,12 +35,15 @@ export default function NewsCard({ item }: { item: Article }) {
       key={item.id}
       className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center"
     >
-      <div className="min-w-[275px] md:w-[275px] overflow-hidden rounded-md px-5 md:px-0">
-        <img
+      <div className="min-w-[275px] md:w-[275px] max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0">
+        {item.fields.thumbnail ? (
+
+          <img
           src={item.fields.thumbnail}
-          alt=""
+          alt="news thumbnail"
           className="w-full h-full object-cover rounded-md transition duration-500 ease-in-out hover:scale-105 cursor-pointer select-none"
-        />
+          />
+        ) : (<div className="w-[275px] p-10 py-30 h-full bg-white/40 text-center">No image found</div>)}
       </div>
       <div className="w-[375px] xl:w-[300px] 2xl:w-[375px] space-y-4 px-5 md:px-0">
         <h4 className="text-xl font-bold cursor-pointer transform duration-200 ease-in-out hover:text-[#1677FF]">

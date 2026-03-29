@@ -8,13 +8,17 @@
     "types": ["vite/client"],
     "skipLibCheck": true,
 
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "@pages/*": ["./src/pages/*"],
-      "@components/*": ["./src/components/*"],
-      "@context/*": ["./src/context/*"],
-      "@api/*": ["./src/api/*"],
-      "@types/*": ["./src/types/*"],
+      "@pages/*": ["pages/*"],
+      "@components": ["components/index.ts"],
+      "@components/*": ["components/*"],
+      "@context": ["context/index.ts"],
+      "@context/*": ["context/*"],
+      "@api": ["api/index.ts"],
+      "@api/*": ["api/*"],
+      "@types": ["types/index.ts"],
+      "@types/*": ["types/*"]
     },
 
     /* Bundler mode */
