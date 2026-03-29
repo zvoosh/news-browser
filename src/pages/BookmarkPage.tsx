@@ -20,10 +20,18 @@ export default function BookmarkPage() {
           return res.data.response.content as Article;
         }),
       );
-      return results;
+      return searchTerm
+        ? results.filter((article) =>
+            article.fields.headline
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()),
+          )
+        : results;
     },
     enabled: bookmarks.length > 0,
   });
+
+  console.log("searchTerm", searchTerm);
 
   if (isError) {
     return (
