@@ -31,7 +31,6 @@ export default function BookmarkPage() {
           )
         : results;
     },
-    enabled: bookmarks.length > 0,
   });
 
   if (isError) {

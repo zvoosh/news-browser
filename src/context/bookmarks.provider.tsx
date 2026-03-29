@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BookmakrsContext } from "./bookmarks.context";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -9,22 +9,24 @@ export function BookmarksProvider({ children }: { children: React.ReactNode }) {
   });
   const queryClient = useQueryClient();
 
-  const addBookmark = async (id: string) => {
-    await setBookmarks((prev) => {
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+  }, [bookmarks]);
+
+  const addBookmark = (id: string) => {
+    setBookmarks((prev) => {
       const updated = prev.includes(id) ? prev : [...prev, id];
       localStorage.setItem("bookmarks", JSON.stringify(updated));
       return updated;
     });
-    queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
   };
 
-  const removeBookmark = async (id: string) => {
-    await setBookmarks((prev) => {
+  const removeBookmark = (id: string) => {
+    setBookmarks((prev) => {
       const updated = prev.filter((item) => item !== id);
       localStorage.setItem("bookmarks", JSON.stringify(updated));
       return updated;
     });
-    queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
   };
 
   return (
