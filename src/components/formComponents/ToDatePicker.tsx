@@ -24,7 +24,7 @@ export default function ToDatePicker({
       disabledDate={(current) =>
         from ? current && current.isBefore(from, "day") : false
       }
-      className="w-1/4"
+      className="w-full md:w-1/4"
     />
   );
 }

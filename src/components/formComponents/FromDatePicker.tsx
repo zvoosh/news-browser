@@ -19,7 +19,7 @@ export default function FromDatePicker({
         }
       }}
       placeholder="From"
-      className="w-1/4"
+      className="w-full md:w-1/4"
     />
   );
 }

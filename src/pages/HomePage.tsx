@@ -77,7 +77,7 @@ export default function HomePage() {
       {/* title section */}
       <div className="max-w-[800px] px-5">
         <h1 className="text-5xl font-medium leading-17">
-          <span className="font-bold">Upgrade</span> your tech life with how-to{" "}
+          <span className="font-bold">Upgrade</span> your life with how-to{" "}
           <span className="font-bold">advice</span>,{" "}
           <span className="font-bold">news</span> and{" "}
           <span className="font-bold">tips</span>.
@@ -98,9 +98,9 @@ export default function HomePage() {
         style={dynamicBgStyle}
       ></div>
       {/* Filters */}
-      <div className="flex gap-5 w-full">
+      <div className="flex flex-col xl:flex-row gap-0 xl:gap-5 w-full">
         <div
-          className={`w-[800px] p-5 ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
+          className={`w-full max-w-[800px] p-5 pb-0 sm:px-10 ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Search the website for news</p>
           <div>
@@ -108,10 +108,10 @@ export default function HomePage() {
           </div>
         </div>
         <div
-          className={`w-full p-5  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
+          className={`w-full p-5 sm:px-10  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Filters</p>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap md:flex-nowrap gap-3">
             <SectionPicker section={section} onChange={handleSectionChange} />
             <OrderPicker order={order} onChange={handleOrderChange} />
             <FromDatePicker from={from} setFrom={setFrom} />
@@ -120,7 +120,7 @@ export default function HomePage() {
         </div>
       </div>
       {/* All Other News */}
-      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 pl-5">
+      <div className="pt-8 2xl:pt-20 flex flex-wrap justify-center max-w-[1400px] gap-10">
         {rest?.map((item, index) => (
           <NewsCard item={item} key={index} />
         ))}

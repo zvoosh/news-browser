@@ -42,9 +42,9 @@ export default function BookmarkPage() {
     );
   }
   return (
-    <div className="w-full h-full pt-30">
+    <div className="w-full h-full pt-15 2xl:pt-30">
       {/* Filters */}
-      <div className="flex gap-5 w-full">
+      <div className="flex gap-5 w-full justify-center xl:justify-start">
         <div
           className={`w-[600px] p-5  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
@@ -55,7 +55,7 @@ export default function BookmarkPage() {
         </div>
       </div>
       {/* All Other News */}
-      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 pl-5">
+      <div className="pt-5 2xl:pt-20 flex flex-wrap justify-center max-w-[1400px] gap-10">
         {data?.map((item, index) => (
           <NewsCard
             item={item}

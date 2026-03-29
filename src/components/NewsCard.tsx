@@ -19,7 +19,7 @@ export default function NewsCard({
     <div
       className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center"
     >
-      <div className="min-w-[275px] md:w-[275px] max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0">
+      <div className="min-w-[275px] w-[375px] md:w-[275px] md:max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0 ">
         {item.fields.thumbnail ? (
           <img
             src={item.fields.thumbnail}

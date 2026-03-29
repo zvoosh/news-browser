@@ -18,7 +18,7 @@ export default function SectionPicker({
 }) {
   return (
     <Select
-      className="w-1/4"
+      className="w-full md:w-1/4"
       placeholder="Select section"
       options={sectionOptions}
       defaultValue={section}

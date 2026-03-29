@@ -15,7 +15,7 @@ export default function OrderPicker({
 }) {
   return (
     <Select
-      className="w-1/4"
+      className="w-full md:w-1/4"
       placeholder="Select order"
       options={orderOptions}
       defaultValue={order}
