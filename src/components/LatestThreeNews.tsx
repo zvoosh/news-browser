@@ -25,7 +25,7 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                 </div>
               </>
             ) : (
-              <div className="rounded-md w-full p-10 py-30 h-full bg-white/40 flex justify-center items-center">
+              <div className="rounded-md w-full h-full bg-gray-500/40 flex justify-center items-center">
                 No image found
               </div>
             )}
@@ -51,7 +51,7 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                   </div>
                 </>
               ) : (
-                <div className="rounded-md w-full p-10 py-30 h-full bg-white/40 flex justify-center items-center">
+                <div className="rounded-md w-full h-full bg-gray-500/40 flex justify-center items-center">
                   No image found
                 </div>
               )}
@@ -75,7 +75,7 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                   </div>
                 </>
               ) : (
-                <div className="rounded-md w-full p-10 py-30 h-full bg-white/40 flex justify-center items-center">
+                <div className="rounded-md w-full h-full bg-gray-500/40 flex justify-center items-center">
                   No image found
                 </div>
               )}

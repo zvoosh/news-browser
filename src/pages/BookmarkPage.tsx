@@ -4,10 +4,13 @@ import api from "@api";
 import { NewsCard, SearchBar } from "@components";
 import type { Article } from "@types";
 import { BookmakrsContext } from "@context/bookmarks.context";
+import { ThemeContext } from "@context";
 
 export default function BookmarkPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { bookmarks } = useContext(BookmakrsContext);
+
+  const { isLight } = useContext(ThemeContext);
 
   const { data, isError } = useQuery<Article[]>({
     queryKey: ["bookmarks", searchTerm],
@@ -43,7 +46,7 @@ export default function BookmarkPage() {
       {/* Filters */}
       <div className="flex gap-5 w-full">
         <div
-          className={`w-[600px] p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3`}
+          className={`w-[600px] p-5  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Search the website for news</p>
           <div>
@@ -54,7 +57,11 @@ export default function BookmarkPage() {
       {/* All Other News */}
       <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
         {data?.map((item, index) => (
-          <NewsCard item={item} key={index} className={index === data.length - 1 ? "mr-auto" : ""}/>
+          <NewsCard
+            item={item}
+            key={index}
+            className={index === data.length - 1 ? "mr-auto" : ""}
+          />
         ))}
       </div>
     </div>

@@ -100,7 +100,7 @@ export default function HomePage() {
       {/* Filters */}
       <div className="flex gap-5 w-full">
         <div
-          className={`w-[800px] p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3`}
+          className={`w-[800px] p-5 ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Search the website for news</p>
           <div>
@@ -108,7 +108,7 @@ export default function HomePage() {
           </div>
         </div>
         <div
-          className={`w-full p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3`}
+          className={`w-full p-5  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
           <p className="font-semibold">Filters</p>
           <div className="flex gap-3">

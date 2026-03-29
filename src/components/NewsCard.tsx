@@ -29,7 +29,7 @@ export default function NewsCard({
             className="w-full h-full object-cover rounded-md transition duration-500 ease-in-out hover:scale-105 cursor-pointer select-none"
           />
         ) : (
-          <div className="w-[275px] p-10 py-30 h-full bg-white/40 text-center">
+          <div className="w-[275px] h-full max-h-[200px] bg-gray-500/40 flex items-center justify-center">
             No image found
           </div>
         )}
