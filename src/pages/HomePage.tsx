@@ -29,7 +29,7 @@ export default function HomePage() {
 
   const { data, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<GuardianResponse, Error, Article[]>({
-      queryKey: ["users", section, order, from, to, searchTerm],
+      queryKey: ["articles", section, order, from, to, searchTerm],
       queryFn: async ({ pageParam = 1 }) => {
         const res = await api.get(
           `search?q=${encodeURIComponent(searchTerm)}&section=${section}&show-fields=body,headline,byline,thumbnail&order-by=${order}${from ? `&from-date=${from.format("YYYY-MM-DD")}` : ""}${to ? `&to-date=${to.format("YYYY-MM-DD")}` : ""}&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=13`,
@@ -99,13 +99,17 @@ export default function HomePage() {
       ></div>
       {/* Filters */}
       <div className="flex gap-5 w-full">
-        <div className="w-[800px] p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3">
+        <div
+          className={`w-[800px] p-5 ${isDark ? "bg-[#1677FF]" : "bg-[#1677FF]/80"} text-white rounded-xl mt-5 space-y-3`}
+        >
           <p className="font-semibold">Search the website for news</p>
           <div>
             <SearchBar onSearch={setSearchTerm} />
           </div>
         </div>
-        <div className="w-full p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3">
+        <div
+          className={`w-full p-5 ${isDark ? "bg-[#1677FF]" : "bg-[#1677FF]/80"} text-white rounded-xl mt-5 space-y-3`}
+        >
           <p className="font-semibold">Filters</p>
           <div className="flex gap-3">
             <SectionPicker section={section} onChange={handleSectionChange} />

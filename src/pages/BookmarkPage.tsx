@@ -1,4 +1,56 @@
-export default function BookmarkPage () {
-    
-  return <div className="w-full h-full">bookmark page</div>;
+import { useContext, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import api from "@api";
+import { NewsCard, SearchBar } from "@components";
+import type { Article } from "@types";
+import { BookmakrsContext } from "@context/bookmarks.context";
+
+export default function BookmarkPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const { bookmarks } = useContext(BookmakrsContext);
+
+  const { data, isError } = useQuery<Article[]>({
+    queryKey: ["bookmarks", searchTerm],
+    queryFn: async () => {
+      const results = await Promise.all(
+        bookmarks.map(async (id) => {
+          const res = await api.get(
+            `/${id}?show-fields=body,headline,byline,thumbnail&api-key=67a28272-3250-4204-b651-0a21af15a7d7`,
+          );
+          return res.data.response.content as Article;
+        }),
+      );
+      return results;
+    },
+    enabled: bookmarks.length > 0,
+  });
+
+  if (isError) {
+    return (
+      <div className="w-full h-full text-white flex justify-center items-center mt-20">
+        Error fetching news
+      </div>
+    );
+  }
+  return (
+    <div className="w-full h-full pt-30">
+      {/* Filters */}
+      <div className="flex gap-5 w-full">
+        <div
+          className={`w-[600px] p-5 bg-gray-700/70 text-white rounded-xl mt-5 space-y-3`}
+        >
+          <p className="font-semibold">Search the website for news</p>
+          <div>
+            <SearchBar onSearch={setSearchTerm} />
+          </div>
+        </div>
+      </div>
+      {/* All Other News */}
+      <div className="pt-20 flex flex-wrap max-w-[1400px] gap-10 justify-center">
+        {data?.map((item, index) => (
+          <NewsCard item={item} key={index} />
+        ))}
+      </div>
+    </div>
+  );
 }
