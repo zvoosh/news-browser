@@ -5,21 +5,31 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import { BookmakrsContext } from "@context/bookmarks.context";
 import { ThemeContext } from "@context";
+import { useNavigate } from "react-router";
 
-export default function NewsCard({
-  item,
-}: {
-  item: Article;
-}) {
+const truncateText = (text: string, maxLength: number = 100) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
+
+export default function NewsCard({ item }: { item: Article }) {
+  const navigate = useNavigate();
+
   const { bookmarks, addBookmark, removeBookmark } =
     useContext(BookmakrsContext);
 
+  console.log("/${item.id}", item.id);
+
   const { isLight } = useContext(ThemeContext);
   return (
-    <div
-      className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center"
-    >
-      <div className="min-w-[275px] w-[375px] md:w-[275px] md:max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0 ">
+    <div className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center">
+      <div
+        className="min-w-[275px] w-[375px] md:w-[275px] md:max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0"
+        onClick={() =>
+          navigate(`/${truncateText(item.fields.headline, 5)}`, {
+            state: { id: item.id },
+          })
+        }
+      >
         {item.fields.thumbnail ? (
           <img
             src={item.fields.thumbnail}
@@ -33,7 +43,14 @@ export default function NewsCard({
         )}
       </div>
       <div className="w-[375px] xl:w-[300px] 2xl:w-[375px] space-y-4 px-5 md:px-0">
-        <h4 className="text-xl font-bold cursor-pointer transform duration-200 ease-in-out hover:text-[#1677FF]">
+        <h4
+          className="text-xl font-bold cursor-pointer transform duration-200 ease-in-out hover:text-[#1677FF]"
+          onClick={() =>
+            navigate(`/${truncateText(item.fields.headline, 5)}`, {
+              state: { id: item.id },
+            })
+          }
+        >
           {item.fields.headline}
         </h4>
         <TruncateParagraph data={item.fields.body} />
@@ -46,7 +63,7 @@ export default function NewsCard({
           </div>
           <div>
             <FaBookmark
-              color={`${bookmarks.includes(item.id) ? `${isLight ? "red" : "yellow" }` : "gray"}`}
+              color={`${bookmarks.includes(item.id) ? `${isLight ? "red" : "yellow"}` : "gray"}`}
               className="cursor-pointer"
               onClick={() =>
                 bookmarks.includes(item.id)

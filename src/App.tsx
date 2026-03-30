@@ -5,17 +5,19 @@ import HomePage from "@pages/HomePage";
 import BookmarkPage from "@pages/BookmarkPage";
 import { useContext } from "react";
 import { ThemeContext } from "@context/theme.context";
+import SingleNewsPage from "@pages/SingleNewsPage";
 
 function App() {
   const { isLight } = useContext(ThemeContext);
 
   return (
     <div
-      className={`w-screen max-h-screen overflow-hidden overflow-y-auto flex justify-center transition duration-200 pb-10 ${isLight ? "bg-white text-black" : "bg-[#1b1d21] text-white"}`}
+      className={`w-screen min-h-screen max-h-screen overflow-hidden overflow-y-auto flex justify-center transition duration-200 pb-10 ${isLight ? "bg-white text-black" : "bg-[#1b1d21] text-white"}`}
     >
       <Routes>
         <Route path="/" element={<PageLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="/:id" element={<SingleNewsPage />} />
           {/* <Route index element={<SingleNewsPage />} /> */}
           <Route path="/bookmarks" element={<BookmarkPage />} />
         </Route>

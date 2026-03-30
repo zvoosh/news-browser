@@ -1,19 +1,20 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "@api";
-import { NewsCard, SearchBar } from "@components";
+import { NewsCard } from "@components";
 import type { Article } from "@types";
 import { BookmakrsContext } from "@context/bookmarks.context";
 import { ThemeContext } from "@context";
 
 export default function BookmarkPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState<string>("");
+
   const { bookmarks } = useContext(BookmakrsContext);
 
   const { isLight } = useContext(ThemeContext);
 
   const { data, isError } = useQuery<Article[]>({
-    queryKey: ["bookmarks", searchTerm],
+    queryKey: ["bookmarks"],
     queryFn: async () => {
       const results = await Promise.all(
         bookmarks.map(async (id) => {
@@ -23,13 +24,7 @@ export default function BookmarkPage() {
           return res.data.response.content as Article;
         }),
       );
-      return searchTerm
-        ? results.filter((article) =>
-            article.fields.headline
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase()),
-          )
-        : results;
+      return results;
     },
   });
 
@@ -41,26 +36,27 @@ export default function BookmarkPage() {
     );
   }
   return (
-    <div className="w-full h-full pt-15 2xl:pt-30">
-      {/* Filters */}
+    <div className="w-full h-full pt-15">
+      {/* Filters
       <div className="flex gap-5 w-full justify-center xl:justify-start">
         <div
           className={`w-[600px] p-5  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
         >
-          <p className="font-semibold">Search the website for news</p>
+          <p className="font-semibold">Search by headline</p>
           <div>
             <SearchBar onSearch={setSearchTerm} />
           </div>
         </div>
-      </div>
+      </div> */}
       {/* All Other News */}
       <div className="pt-5 2xl:pt-20 flex flex-wrap justify-center max-w-[1400px] gap-10">
-        {data?.map((item, index) => (
-          <NewsCard
-            item={item}
-            key={index}
-          />
-        ))}
+        {data && data.length > 0 ? (
+          data.map((item, index) => <NewsCard item={item} key={index} />)
+        ) : (
+          <div className={isLight ? "text-black" : "text-white"}>
+            No Bookmarked Articles
+          </div>
+        )}
       </div>
     </div>
   );
