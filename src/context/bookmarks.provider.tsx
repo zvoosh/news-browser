@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { BookmakrsContext } from "./bookmarks.context";
 import { useQueryClient } from "@tanstack/react-query";
+import type { IBookmark } from "@types";
 
 export function BookmarksProvider({ children }: { children: React.ReactNode }) {
-  const [bookmarks, setBookmarks] = useState<string[]>(() => {
+  const [bookmarks, setBookmarks] = useState<IBookmark[]>(() => {
     const bookmarksLocalStorage = localStorage.getItem("bookmarks");
     return bookmarksLocalStorage ? JSON.parse(bookmarksLocalStorage) : [];
   });
@@ -11,19 +12,34 @@ export function BookmarksProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
-  }, [bookmarks]);
+  }, [bookmarks, queryClient]);
 
-  const addBookmark = (id: string) => {
-    setBookmarks((prev) => {
-      const updated = prev.includes(id) ? prev : [...prev, id];
+  const addBookmark = ({
+    id,
+    webUrl,
+    webPublicationDate,
+    fields: { thumbnail, headline, body, byline },
+  }: IBookmark) => {
+    setBookmarks((prev: IBookmark[]) => {
+      const updated = prev.some((item) => item.id === id)
+        ? prev
+        : [
+            ...prev,
+            {
+              id,
+              webUrl,
+              fields: { headline, thumbnail, body, byline },
+              webPublicationDate,
+            },
+          ];
       localStorage.setItem("bookmarks", JSON.stringify(updated));
       return updated;
     });
   };
 
   const removeBookmark = (id: string) => {
-    setBookmarks((prev) => {
-      const updated = prev.filter((item) => item !== id);
+    setBookmarks((prev: IBookmark[]) => {
+      const updated = prev.filter((item) => item.id !== id);
       localStorage.setItem("bookmarks", JSON.stringify(updated));
       return updated;
     });

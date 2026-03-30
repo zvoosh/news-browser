@@ -1,3 +1,15 @@
+export interface IBookmark {
+  id: string;
+  webUrl: string;
+  webPublicationDate: string;
+  fields: {
+    thumbnail?: string;
+    headline: string;
+    body: string;
+    byline?: string;
+  };
+}
+
 export interface ArticleFields {
   headline: string;
   body: string;
@@ -13,6 +25,7 @@ export interface Article {
   webPublicationDate: string;
   webTitle: string;
   fields: ArticleFields;
+  webUrl: string;
 }
 
 export interface GuardianResponse {

@@ -1,57 +1,17 @@
 import { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
-import api from "@api";
 import { NewsCard } from "@components";
-import type { Article } from "@types";
 import { BookmakrsContext } from "@context/bookmarks.context";
 import { ThemeContext } from "@context";
 
 export default function BookmarkPage() {
-  // const [searchTerm, setSearchTerm] = useState<string>("");
-
   const { bookmarks } = useContext(BookmakrsContext);
-
   const { isLight } = useContext(ThemeContext);
 
-  const { data, isError } = useQuery<Article[]>({
-    queryKey: ["bookmarks"],
-    queryFn: async () => {
-      const results = await Promise.all(
-        bookmarks.map(async (id) => {
-          const res = await api.get(
-            `/${id}?show-fields=body,headline,byline,thumbnail&api-key=67a28272-3250-4204-b651-0a21af15a7d7`,
-          );
-          return res.data.response.content as Article;
-        }),
-      );
-      return results;
-    },
-  });
-
-  if (isError) {
-    return (
-      <div className="w-full h-full text-white flex justify-center items-center mt-20">
-        Error fetching news
-      </div>
-    );
-  }
   return (
     <div className="w-full h-full pt-15">
-      {/* Filters
-      <div className="flex gap-5 w-full justify-center xl:justify-start">
-        <div
-          className={`w-[600px] p-5  ${isLight ? "text-black" : "text-white"} rounded-xl mt-5 space-y-3`}
-        >
-          <p className="font-semibold">Search by headline</p>
-          <div>
-            <SearchBar onSearch={setSearchTerm} />
-          </div>
-        </div>
-      </div> */}
-      {/* All Other News */}
       <div className="pt-5 2xl:pt-20 flex flex-wrap justify-center max-w-[1400px] gap-10">
-        {data && data.length > 0 ? (
-          data.map((item, index) => <NewsCard item={item} key={index} />)
+        {bookmarks && bookmarks.length > 0 ? (
+          bookmarks.map((item, index) => <NewsCard item={item} key={index} />)
         ) : (
           <div className={isLight ? "text-black" : "text-white"}>
             No Bookmarked Articles

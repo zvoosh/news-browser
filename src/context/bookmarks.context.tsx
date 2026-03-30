@@ -1,8 +1,9 @@
+import type { IBookmark } from "@types";
 import { createContext } from "react";
 
 interface BookmarksContextType {
-  bookmarks: string[];
-  addBookmark: (id: string) => void;
+  bookmarks: IBookmark[];
+  addBookmark: (item: IBookmark) => void;
   removeBookmark: (id: string) => void;
 }
 

@@ -1,5 +1,5 @@
 import { FaBookmark } from "react-icons/fa";
-import type { Article } from "../types/types";
+import type { Article, IBookmark } from "../types/types";
 import TruncateParagraph from "./TruncateParagraph";
 import dayjs from "dayjs";
 import { useContext } from "react";
@@ -11,7 +11,7 @@ const truncateText = (text: string, maxLength: number = 100) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
 
-export default function NewsCard({ item }: { item: Article }) {
+export default function NewsCard({ item }: { item: Article | IBookmark }) {
   const navigate = useNavigate();
 
   const { bookmarks, addBookmark, removeBookmark } =
@@ -25,8 +25,8 @@ export default function NewsCard({ item }: { item: Article }) {
       <div
         className="min-w-[275px] w-[375px] md:w-[275px] md:max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0"
         onClick={() =>
-          navigate(`/${truncateText(item.fields.headline, 5)}`, {
-            state: { id: item.id },
+          navigate(`/${truncateText(item.fields.headline, 10)}`, {
+            state: { item: item },
           })
         }
       >
@@ -46,8 +46,8 @@ export default function NewsCard({ item }: { item: Article }) {
         <h4
           className="text-xl font-bold cursor-pointer transform duration-200 ease-in-out hover:text-[#1677FF]"
           onClick={() =>
-            navigate(`/${truncateText(item.fields.headline, 5)}`, {
-              state: { id: item.id },
+            navigate(`/${truncateText(item.fields.headline, 10)}`, {
+              state: { item: item },
             })
           }
         >
@@ -63,12 +63,26 @@ export default function NewsCard({ item }: { item: Article }) {
           </div>
           <div>
             <FaBookmark
-              color={`${bookmarks.includes(item.id) ? `${isLight ? "red" : "yellow"}` : "gray"}`}
+              color={`${
+                bookmarks.some((bookmark) => bookmark.id === item.id)
+                  ? `${isLight ? "red" : "yellow"}`
+                  : "gray"
+              }`}
               className="cursor-pointer"
               onClick={() =>
-                bookmarks.includes(item.id)
+                bookmarks.some((bookmark) => bookmark.id === item.id)
                   ? removeBookmark(item.id)
-                  : addBookmark(item.id)
+                  : addBookmark({
+                      id: item.id,
+                      fields: {
+                        byline: item.fields.byline,
+                        body: item.fields.body,
+                        headline: item.fields.headline,
+                        thumbnail: item.fields.thumbnail,
+                      },
+                      webPublicationDate: item.webPublicationDate,
+                      webUrl: item.webUrl,
+                    })
               }
             />
           </div>
