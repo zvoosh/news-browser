@@ -17,7 +17,7 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
               className="w-full lg:w-1/2 relative cursor-pointer group"
               onClick={() =>
                 navigate(`/${truncateText(items[0].fields.headline, 10)}`, {
-                  state: { id: items[0].id },
+                  state: { item: items[0] },
                 })
               }
             >
@@ -51,7 +51,7 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                 className="w-full h-1/2 relative cursor-pointer group"
                 onClick={() =>
                   navigate(`/${truncateText(items[1].fields.headline, 10)}`, {
-                    state: { id: items[1].id },
+                  state: { item: items[1] },
                   })
                 }
               >
@@ -80,8 +80,8 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
               <div
                 className="w-full h-1/2 relative cursor-pointer group"
                 onClick={() =>
-                  navigate(`/${truncateText(items[1].fields.headline, 10)}`, {
-                    state: { id: items[1].id },
+                  navigate(`/${truncateText(items[2].fields.headline, 10)}`, {
+                  state: { item: items[2] },
                   })
                 }
               >

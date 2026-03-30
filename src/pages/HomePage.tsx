@@ -47,8 +47,6 @@ export default function HomePage() {
       select: selectArticles,
     });
 
-  console.log("render");
-
   const firstThree = useMemo(() => data?.slice(0, 3), [data]);
   const rest = useMemo(() => data?.slice(3), [data]);
 

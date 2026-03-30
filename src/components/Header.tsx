@@ -46,12 +46,18 @@ export default function Header() {
               <Link
                 to={"/"}
                 className={`w-full max-w-[300px] px-2 py-1 rounded-md ${isLight ? (location.pathname === "/" ? "border-white bg-black text-white" : "") : location.pathname === "/" ? "border-gray-800 bg-white text-gray-800" : ""}`}
+                onClick={() => {
+                  setIsOpen(false);
+                }}
               >
                 Home
               </Link>
               <Link
                 to={"/bookmarks"}
                 className={`w-full max-w-[300px] px-2 py-1 rounded-md ${isLight ? (location.pathname === "/bookmarks" ? "border-white bg-black text-white" : "") : location.pathname === "/bookmarks" ? "border-gray-800 bg-white text-gray-800" : ""}`}
+                onClick={() => {
+                  setIsOpen(false);
+                }}
               >
                 Bookmarks
               </Link>
