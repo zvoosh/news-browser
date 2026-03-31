@@ -1,11 +1,20 @@
 import { useNavigate } from "react-router";
 import type { Article } from "../types/types";
+import { FaBookmark } from "react-icons/fa";
+import { useContext } from "react";
+import { BookmakrsContext } from "@context/bookmarks.context";
+import { ThemeContext } from "@context";
 
 const truncateText = (text: string, maxLength: number = 100) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
 export default function LatestThreeNews({ items }: { items?: Article[] }) {
   const navigate = useNavigate();
+
+  const { bookmarks, addBookmark, removeBookmark } =
+    useContext(BookmakrsContext);
+
+  const { isLight } = useContext(ThemeContext);
 
   return (
     <>
@@ -45,8 +54,36 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                   opacity-0 group-hover:opacity-100 
                   transition-opacity duration-200"
               ></div>
-              <div className="absolute bottom-0 p-3 font-semibold text-xl w-full backdrop-blur-3xl text-white">
-                {items[0].fields.headline}
+              <div className="absolute bottom-0 p-3 font-semibold text-xl w-full backdrop-blur-3xl text-white flex justify-between items-end">
+                <span>{items[0].fields.headline}</span>
+                <FaBookmark
+                  color={`${
+                    bookmarks.some((bookmark) => bookmark.id === items[0].id)
+                      ? `${isLight ? "red" : "yellow"}`
+                      : "gray"
+                  }`}
+                  className="cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (
+                      bookmarks.some((bookmark) => bookmark.id === items[0].id)
+                    ) {
+                      removeBookmark(items[0].id);
+                    } else {
+                      addBookmark({
+                        id: items[0].id,
+                        fields: {
+                          byline: items[0].fields.byline,
+                          body: items[0].fields.body,
+                          headline: items[0].fields.headline,
+                          thumbnail: items[0].fields.thumbnail,
+                        },
+                        webPublicationDate: items[0].webPublicationDate,
+                        webUrl: items[0].webUrl,
+                      });
+                    }
+                  }}
+                />
               </div>
             </div>
           )}
@@ -85,8 +122,38 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                     opacity-0 group-hover:opacity-100 
                     transition-opacity duration-200"
                 ></div>
-                <div className="absolute bottom-0 p-3 font-semibold text-xl w-full backdrop-blur-3xl text-white">
-                  {items[1].fields.headline}
+                <div className="absolute bottom-0 p-3 font-semibold text-xl w-full backdrop-blur-3xl text-white flex justify-between items-end">
+                  <span>{items[1].fields.headline}</span>
+                  <FaBookmark
+                    color={`${
+                      bookmarks.some((bookmark) => bookmark.id === items[1].id)
+                        ? `${isLight ? "red" : "yellow"}`
+                        : "gray"
+                    }`}
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (
+                        bookmarks.some(
+                          (bookmark) => bookmark.id === items[1].id,
+                        )
+                      ) {
+                        removeBookmark(items[1].id);
+                      } else {
+                        addBookmark({
+                          id: items[1].id,
+                          fields: {
+                            byline: items[1].fields.byline,
+                            body: items[1].fields.body,
+                            headline: items[1].fields.headline,
+                            thumbnail: items[1].fields.thumbnail,
+                          },
+                          webPublicationDate: items[1].webPublicationDate,
+                          webUrl: items[1].webUrl,
+                        });
+                      }
+                    }}
+                  />
                 </div>
               </div>
             )}
@@ -123,8 +190,38 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
                   opacity-0 group-hover:opacity-100 
                   transition-opacity duration-200"
                 ></div>
-                <div className="absolute bottom-0 p-3 font-semibold text-xl w-full backdrop-blur-3xl text-white">
-                  {items[2].fields.headline}
+                <div className="absolute bottom-0 p-3 font-semibold text-xl w-full backdrop-blur-3xl text-white flex justify-between items-end">
+                  <span>{items[2].fields.headline}</span>
+                  <FaBookmark
+                    color={`${
+                      bookmarks.some((bookmark) => bookmark.id === items[2].id)
+                        ? `${isLight ? "red" : "yellow"}`
+                        : "gray"
+                    }`}
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (
+                        bookmarks.some(
+                          (bookmark) => bookmark.id === items[2].id,
+                        )
+                      ) {
+                        removeBookmark(items[2].id);
+                      } else {
+                        addBookmark({
+                          id: items[2].id,
+                          fields: {
+                            byline: items[2].fields.byline,
+                            body: items[2].fields.body,
+                            headline: items[2].fields.headline,
+                            thumbnail: items[2].fields.thumbnail,
+                          },
+                          webPublicationDate: items[2].webPublicationDate,
+                          webUrl: items[2].webUrl,
+                        });
+                      }
+                    }}
+                  />
                 </div>
               </div>
             )}
