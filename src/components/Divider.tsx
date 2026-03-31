@@ -1,10 +1,14 @@
+import { ThemeContext } from "@context";
+import { useContext } from "react";
+
 export default function Divider() {
+  const { isLight } = useContext(ThemeContext);
   const dynamicBgStyle = {
-    background: "linear-gradient(to right, #ff7e5f, #feb47b)",
+    background: !isLight ? "white" : "black",
   };
   return (
     <div
-      className="h-0.25 w-full relative left-0 mt-10 "
+      className="h-0.5 w-full relative left-0 mt-10 "
       style={dynamicBgStyle}
     ></div>
   );

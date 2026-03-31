@@ -10,7 +10,7 @@ export default function Header() {
   const location = useLocation();
   return (
     <div
-      className={`w-full h-20 fixed z-99 border-b-2 border-[#1677FF] transition duration-200 ${isLight ? "bg-white text-black" : "bg-[#1b1d21] text-white"} max-w-[1400px] text-lg`}
+      className={`w-full h-20 fixed z-99 border-b-3 border-[#1677FF] transition duration-200 ${isLight ? "bg-white text-black" : "bg-[#1b1d21] text-white"} max-w-[1400px] text-lg`}
     >
       <div className="w-full max-w-[1400px] h-full flex justify-between items-baseline px-5 pt-3.5">
         <div className="flex gap-10 items-baseline">
