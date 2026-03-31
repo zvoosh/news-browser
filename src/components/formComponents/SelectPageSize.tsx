@@ -6,7 +6,7 @@ const pageSizeOptions = [
   { value: "50", label: "Page size: 50" },
 ];
 
-export default function SectionPicker({
+export default function SelectPageSize({
   pageSize,
   onChange
 }: {

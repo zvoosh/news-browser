@@ -6,7 +6,7 @@ export default function FromDatePicker({
   setFrom,
 }: {
   from: Dayjs | null;
-  setFrom: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  setFrom: (value: Dayjs | null) => void;
 }) {
   return (
     <DatePicker

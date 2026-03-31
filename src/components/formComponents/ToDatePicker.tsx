@@ -8,7 +8,7 @@ export default function ToDatePicker({
 }: {
   to: Dayjs | null;
   from: Dayjs | null;
-  setTo: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  setTo: (value: Dayjs | null) => void;
 }) {
   return (
     <DatePicker

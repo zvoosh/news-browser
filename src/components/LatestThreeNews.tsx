@@ -8,7 +8,13 @@ import { ThemeContext } from "@context";
 const truncateText = (text: string, maxLength: number = 100) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
-export default function LatestThreeNews({ items }: { items?: Article[] }) {
+export default function LatestThreeNews({
+  items,
+  handleOnClick,
+}: {
+  items?: Article[];
+  handleOnClick: () => void;
+}) {
   const navigate = useNavigate();
 
   const { bookmarks, addBookmark, removeBookmark } =
@@ -17,8 +23,8 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
   const { isLight } = useContext(ThemeContext);
 
   return (
-    <>
-      {items ? (
+    <div className="min-h-[525px] mt-20 px-5">
+      {items && items.length > 0 ? (
         <div className="flex flex-col lg:flex-row lg:justify-center gap-5 min-h-[525px] lg:h-[525px] w-full">
           {/* Leva strana */}
           {items[0] && (
@@ -228,8 +234,16 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
           </div>
         </div>
       ) : (
-        <></>
+        <div className="text-center text-gray-500">
+          No news found. Try adjusting your search criteria, or{" "}
+          <span
+            className="underline underline-offset-4 text-blue-400 cursor-pointer"
+            onClick={handleOnClick}
+          >
+            click here to reset.
+          </span>
+        </div>
       )}
-    </>
+    </div>
   );
 }
