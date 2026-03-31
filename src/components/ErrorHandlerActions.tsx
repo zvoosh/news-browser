@@ -5,7 +5,6 @@ import { ThemeContext } from "@context";
 type ApiError = {
   response?: {
     status: number;
-    statusText?: string;
     data?: unknown;
   };
 };

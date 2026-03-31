@@ -95,7 +95,7 @@ export default function HomePage() {
     if (value === "") {
       setFilters((prev) => {
         if (JSON.stringify(prev) === JSON.stringify(initialState)) {
-          return prev; // ❌ ne rerenderuj
+          return prev;
         }
         return initialState;
       });
