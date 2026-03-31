@@ -1,21 +1,18 @@
-import { useNavigate } from "react-router";
 import type { Article } from "../types/types";
 import { FaBookmark } from "react-icons/fa";
 import { useContext } from "react";
 import { BookmakrsContext } from "@context/bookmarks.context";
 import { ThemeContext } from "@context";
 
-const truncateText = (text: string, maxLength: number = 100) => {
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
-};
 export default function LatestThreeNews({
   items,
   handleOnClick,
+  setOpen,
 }: {
   items?: Article[];
   handleOnClick: () => void;
+  setOpen?: React.Dispatch<React.SetStateAction<Article | null>>;
 }) {
-  const navigate = useNavigate();
 
   const { bookmarks, addBookmark, removeBookmark } =
     useContext(BookmakrsContext);
@@ -31,9 +28,7 @@ export default function LatestThreeNews({
             <div
               className="w-full lg:w-1/2 relative cursor-pointer group"
               onClick={() => {
-                navigate(`/${truncateText(items[0].fields.headline, 10)}`, {
-                  state: { item: items[0] },
-                });
+                if (setOpen) setOpen(items[0] as Article);
                 const mainDiv = document.getElementById("main");
                 if (mainDiv) {
                   mainDiv.scrollTo({
@@ -100,9 +95,7 @@ export default function LatestThreeNews({
               <div
                 className="w-full h-1/2 relative cursor-pointer group"
                 onClick={() => {
-                  navigate(`/${truncateText(items[1].fields.headline, 10)}`, {
-                    state: { item: items[1] },
-                  });
+                  if (setOpen) setOpen(items[1] as Article);
                   const mainDiv = document.getElementById("main");
                   if (mainDiv) {
                     mainDiv.scrollTo({
@@ -167,9 +160,7 @@ export default function LatestThreeNews({
               <div
                 className="w-full h-1/2 relative cursor-pointer group"
                 onClick={() => {
-                  navigate(`/${truncateText(items[2].fields.headline, 10)}`, {
-                    state: { item: items[2] },
-                  });
+                  if (setOpen) setOpen(items[2] as Article);
                   const mainDiv = document.getElementById("main");
                   if (mainDiv) {
                     mainDiv.scrollTo({

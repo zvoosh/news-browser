@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {
@@ -13,7 +13,8 @@ import {
 } from "@components";
 import type { Article, GuardianResponse, IFilters } from "@types";
 import api from "@api";
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   from: null,
@@ -24,12 +25,15 @@ const initialState = {
   order: "newest",
 };
 
+const truncateText = (text: string, maxLength: number = 100) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
+
 export default function HomePage() {
   const [filters, setFilters] = useState<IFilters>(initialState);
+  const [open, setOpen] = useState<Article | null>(null);
   const [savedSearches, setSavedSearches] = useState<string | null | "">("");
-  useEffect(() => {
-    console.log("filters changed", filters);
-  }, [filters]);
+  const navigate = useNavigate();
   const {
     data,
     error,
@@ -156,7 +160,11 @@ export default function HomePage() {
   }, []);
 
   if (isFetching) {
-    return <div className="mt-40 flex justify-center"><Spin size="large"/></div>;
+    return (
+      <div className="mt-40 flex justify-center">
+        <Spin size="large" />
+      </div>
+    );
   }
 
   // Error handling
@@ -168,7 +176,11 @@ export default function HomePage() {
     <div className="w-full h-full pt-30">
       <TitleSections />
       <Divider />
-      <LatestThreeNews items={firstThree} handleOnClick={handleReset} />
+      <LatestThreeNews
+        items={firstThree}
+        handleOnClick={handleReset}
+        setOpen={setOpen}
+      />
       <Divider />
       <AllFilters filters={filters} setFilters={setFilters} />
       <SavedSearchesActions
@@ -178,12 +190,30 @@ export default function HomePage() {
         handleOnClick={handleSavedSearchClick}
         onDelete={handleSavedSearchDelete}
       />
-      <NewsCard items={rest as Article[]} />
+      <NewsCard items={rest as Article[]} setOpen={setOpen} />
       <LoadMoreButton
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         onLoadMore={fetchNextPage}
       />
+      <Modal
+        title="Want to read the full article on The Guardian?"
+        open={open !== null}
+        onOk={() => {
+          if (open?.webUrl) window.open(open.webUrl, "_blank");
+          setOpen(null);
+        }}
+        onCancel={() => {
+          if (open) {
+            navigate(`/${truncateText(open?.fields.headline, 10)}`, {
+              state: { item: open },
+            });
+            setOpen(null);
+          }
+        }}
+        cancelText="No, I want to stay on News Browser"
+        okText="Yes, take me to The Guardian"
+      ></Modal>
     </div>
   );
 }

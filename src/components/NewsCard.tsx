@@ -10,18 +10,19 @@ import { useNavigate } from "react-router";
 const truncateText = (text: string, maxLength: number = 100) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
-
 export default function NewsCard({
   items,
+  setOpen,
 }: {
   items: Article[] | IBookmark[];
+  setOpen?: React.Dispatch<React.SetStateAction<Article | null>>;
 }) {
-  const navigate = useNavigate();
-
   const { bookmarks, addBookmark, removeBookmark } =
     useContext(BookmakrsContext);
 
   const { isLight } = useContext(ThemeContext);
+  const navigate = useNavigate();
+
   return (
     <div className="pt-5 2xl:pt-20 flex flex-wrap justify-center max-w-[1400px] gap-10">
       {items &&
@@ -33,9 +34,13 @@ export default function NewsCard({
             <div
               className="min-w-[275px] w-[375px] md:w-[275px] md:max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0"
               onClick={() => {
-                navigate(`/${truncateText(item.fields.headline, 10)}`, {
-                  state: { item: item },
-                });
+                if (setOpen) {
+                  setOpen(item as Article);
+                } else {
+                  navigate(`/${truncateText(item.fields.headline, 10)}`, {
+                    state: { item: item },
+                  });
+                }
                 const mainDiv = document.getElementById("main");
                 if (mainDiv) {
                   mainDiv.scrollTo({
@@ -61,9 +66,13 @@ export default function NewsCard({
               <h4
                 className="text-xl font-bold cursor-pointer transform duration-200 ease-in-out hover:text-[#1677FF]"
                 onClick={() => {
-                  navigate(`/${truncateText(item.fields.headline, 10)}`, {
-                    state: { item: item },
-                  });
+                  if (setOpen) {
+                    setOpen(item as Article);
+                  } else {
+                    navigate(`/${truncateText(item.fields.headline, 10)}`, {
+                      state: { item: item },
+                    });
+                  }
                   const mainDiv = document.getElementById("main");
                   if (mainDiv) {
                     mainDiv.scrollTo({
