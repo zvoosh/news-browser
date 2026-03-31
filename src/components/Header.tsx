@@ -14,7 +14,7 @@ export default function Header() {
     >
       <div className="w-full max-w-[1400px] h-full flex justify-between items-baseline px-5 pt-3.5">
         <div className="flex gap-10 items-baseline">
-          <div className="font-extrabold text-4xl">
+          <div className="font-extrabold text-4xl select-none">
             <span className="text-[#1677FF]">News</span> Browser
           </div>
           <div className="lg:flex gap-5 text-xl hidden">

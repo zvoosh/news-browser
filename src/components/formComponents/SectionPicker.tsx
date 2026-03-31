@@ -22,6 +22,7 @@ export default function SectionPicker({
       placeholder="Select section"
       options={sectionOptions}
       defaultValue={section}
+      value={section}
       onChange={onChange}
     />
   );

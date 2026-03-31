@@ -19,6 +19,7 @@ export default function OrderPicker({
       placeholder="Select order"
       options={orderOptions}
       defaultValue={order}
+      value={order}
       onChange={onChange}
     />
   );

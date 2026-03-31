@@ -15,11 +15,18 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
           {items[0] && (
             <div
               className="w-full lg:w-1/2 relative cursor-pointer group"
-              onClick={() =>
+              onClick={() => {
                 navigate(`/${truncateText(items[0].fields.headline, 10)}`, {
                   state: { item: items[0] },
-                })
-              }
+                });
+                const mainDiv = document.getElementById("main");
+                if (mainDiv) {
+                  mainDiv.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }
+              }}
             >
               {items[0].fields.thumbnail ? (
                 <img
@@ -49,11 +56,18 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
             {items[1] && (
               <div
                 className="w-full h-1/2 relative cursor-pointer group"
-                onClick={() =>
+                onClick={() => {
                   navigate(`/${truncateText(items[1].fields.headline, 10)}`, {
-                  state: { item: items[1] },
-                  })
-                }
+                    state: { item: items[1] },
+                  });
+                  const mainDiv = document.getElementById("main");
+                  if (mainDiv) {
+                    mainDiv.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }
+                }}
               >
                 {items[1] && items[1].fields.thumbnail ? (
                   <img
@@ -79,11 +93,18 @@ export default function LatestThreeNews({ items }: { items?: Article[] }) {
             {items[2] && (
               <div
                 className="w-full h-1/2 relative cursor-pointer group"
-                onClick={() =>
+                onClick={() => {
                   navigate(`/${truncateText(items[2].fields.headline, 10)}`, {
-                  state: { item: items[2] },
-                  })
-                }
+                    state: { item: items[2] },
+                  });
+                  const mainDiv = document.getElementById("main");
+                  if (mainDiv) {
+                    mainDiv.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }
+                }}
               >
                 {items[2] && items[2].fields.thumbnail ? (
                   <img

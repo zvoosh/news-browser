@@ -17,18 +17,23 @@ export default function NewsCard({ item }: { item: Article | IBookmark }) {
   const { bookmarks, addBookmark, removeBookmark } =
     useContext(BookmakrsContext);
 
-  console.log("/${item.id}", item.id);
-
   const { isLight } = useContext(ThemeContext);
   return (
     <div className="flex gap-4 border-b border-gray-400 pb-5 flex-col md:flex-row justify-center items-center">
       <div
         className="min-w-[275px] w-[375px] md:w-[275px] md:max-w-[275px] h-full max-h-[200px] overflow-hidden rounded-md px-5 md:px-0"
-        onClick={() =>
+        onClick={() => {
           navigate(`/${truncateText(item.fields.headline, 10)}`, {
             state: { item: item },
-          })
-        }
+          });
+          const mainDiv = document.getElementById("main");
+          if (mainDiv) {
+            mainDiv.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }
+        }}
       >
         {item.fields.thumbnail ? (
           <img
@@ -45,11 +50,18 @@ export default function NewsCard({ item }: { item: Article | IBookmark }) {
       <div className="w-[375px] xl:w-[300px] 2xl:w-[375px] space-y-4 px-5 md:px-0">
         <h4
           className="text-xl font-bold cursor-pointer transform duration-200 ease-in-out hover:text-[#1677FF]"
-          onClick={() =>
+          onClick={() => {
             navigate(`/${truncateText(item.fields.headline, 10)}`, {
               state: { item: item },
-            })
-          }
+            });
+            const mainDiv = document.getElementById("main");
+            if (mainDiv) {
+              mainDiv.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+            }
+          }}
         >
           {item.fields.headline}
         </h4>

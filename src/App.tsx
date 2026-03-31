@@ -13,6 +13,7 @@ function App() {
   return (
     <div
       className={`w-screen min-h-screen max-h-screen overflow-hidden overflow-y-auto flex justify-center transition duration-200 pb-10 ${isLight ? "bg-white text-black" : "bg-[#1b1d21] text-white"}`}
+      id="main"
     >
       <Routes>
         <Route path="/" element={<PageLayout />}>

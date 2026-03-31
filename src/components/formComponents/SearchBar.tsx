@@ -1,26 +1,34 @@
-import { useState, useEffect } from "react";
 import { Input } from "antd";
+import { useEffect, useState } from "react";
 
 export default function SearchBar({
-  onSearch,
+  searchTerm,
+  setSearchTerm,
 }: {
-  onSearch: (search: string) => void;
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
 }) {
-  const [value, setValue] = useState("");
+  const [localValue, setLocalValue] = useState(searchTerm);
+  
+  useEffect(() => {
+    setLocalValue(searchTerm);
+  }, [searchTerm]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onSearch(value);
-    }, 400);
+    const handler = setTimeout(() => {
+      setSearchTerm(localValue);
+    }, 300);
 
-    return () => clearTimeout(timeout);
-  }, [value, onSearch]);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [localValue, setSearchTerm]);
 
   return (
     <Input
       placeholder="🔍 Search articles..."
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={localValue}
+      onChange={(e) => setLocalValue(e.target.value)}
     />
   );
 }

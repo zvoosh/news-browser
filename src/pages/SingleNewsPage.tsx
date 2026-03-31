@@ -1,11 +1,11 @@
-import api from "@api";
-import { useQuery } from "@tanstack/react-query";
-import type { Article, GuardianResponse } from "@types";
-import dayjs from "dayjs";
-import { Link, useLocation, useNavigate } from "react-router";
-import DOMPurify from "dompurify";
-import { FaAngleLeft } from "react-icons/fa";
 import { useMemo } from "react";
+import { FaAngleLeft } from "react-icons/fa";
+import DOMPurify from "dompurify";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import api from "@api";
+import type { Article, GuardianResponse } from "@types";
+import { useLocation, useNavigate } from "react-router";
 
 const truncateText = (text: string, maxLength: number = 100) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
@@ -25,7 +25,7 @@ export default function SingleNewsPage() {
     },
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    staleTime: 0
+    staleTime: 0,
   });
 
   const firstFour = useMemo(() => {
@@ -39,13 +39,22 @@ export default function SingleNewsPage() {
   return (
     <div className="w-full h-full mt-30">
       <div className="flex flex-col lg:flex-row lg:gap-5 px-5">
-        <Link
-          to={"/"}
+        <div
+          onClick={() => {
+            navigate(-1);
+            const mainDiv = document.getElementById("main");
+            if (mainDiv) {
+              mainDiv.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+            }
+          }}
           className="flex gap-2 items-center pl-5 md:pl-10 underline underline-offset-4 text-blue-400 lg:hidden"
         >
           <FaAngleLeft />
           <span>Back</span>
-        </Link>
+        </div>
         <div className="w-1/3 xl:w-1/5 hidden lg:flex">
           <div className="space-y-[20px]">
             {firstFour &&
@@ -57,13 +66,20 @@ export default function SingleNewsPage() {
                     navigate(`/${truncateText(item.fields.headline, 10)}`, {
                       state: { item: item },
                     });
+                    const mainDiv = document.getElementById("main");
+                    if (mainDiv) {
+                      mainDiv.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                    }
                   }}
                 >
                   {item.fields.thumbnail ? (
                     <img
                       src={item.fields.thumbnail}
                       alt="latest news"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   ) : (
                     <div className="rounded-md w-full h-full bg-gray-500/40 flex justify-center items-center">
@@ -85,7 +101,10 @@ export default function SingleNewsPage() {
               </h2>
               <div className="flex justify-between items-end -mb-[35px]">
                 <div className="w-3/5">
-                  by: {location.state.item.fields.byline}
+                  by:{" "}
+                  {location.state.item.fields.byline
+                    ? location.state.item.fields.byline
+                    : "unknown"}
                 </div>
                 <div>
                   {dayjs(location.state.item.webPublicationDate).format(
@@ -128,13 +147,20 @@ export default function SingleNewsPage() {
                     navigate(`/${truncateText(item.fields.headline, 10)}`, {
                       state: { item: item },
                     });
+                    const mainDiv = document.getElementById("main");
+                    if (mainDiv) {
+                      mainDiv.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                    }
                   }}
                 >
                   {item.fields.thumbnail ? (
                     <img
                       src={item.fields.thumbnail}
                       alt="latest news"
-                      className="w-full h-full object-cover rounded-md"
+                      className="w-full h-full object-contain rounded-md"
                     />
                   ) : (
                     <div className="rounded-md w-full h-full bg-gray-500/40 flex justify-center items-center">
@@ -159,6 +185,13 @@ export default function SingleNewsPage() {
                     navigate(`/${truncateText(item.fields.headline, 10)}`, {
                       state: { item: item },
                     });
+                    const mainDiv = document.getElementById("main");
+                    if (mainDiv) {
+                      mainDiv.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                    }
                   }}
                 >
                   {item.fields.thumbnail ? (
