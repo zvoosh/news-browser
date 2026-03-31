@@ -13,6 +13,7 @@ import {
 } from "@components";
 import type { Article, GuardianResponse, IFilters } from "@types";
 import api from "@api";
+import { Spin } from "antd";
 
 const initialState = {
   from: null,
@@ -33,6 +34,7 @@ export default function HomePage() {
     data,
     error,
     isError,
+    isFetching,
     refetch,
     fetchNextPage,
     hasNextPage,
@@ -152,6 +154,10 @@ export default function HomePage() {
       return null;
     });
   }, []);
+
+  if (isFetching) {
+    return <div className="mt-40 flex justify-center"><Spin size="large"/></div>;
+  }
 
   // Error handling
   if (isError) {
