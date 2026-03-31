@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router";
-import "./App.css";
 import PageLayout from "@components/PageLayout";
 import HomePage from "@pages/HomePage";
 import BookmarkPage from "@pages/BookmarkPage";
