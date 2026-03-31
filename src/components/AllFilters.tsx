@@ -8,34 +8,14 @@ import {
   ToDatePicker,
 } from "./formComponents";
 import { useContext } from "react";
-import type { Dayjs } from "dayjs";
+import type { IFilters } from "@types";
 
 export default function AllFilters({
-  searchTerm,
-  setSearchTerm,
-  section,
-  handleSectionChange,
-  order,
-  handleOrderChange,
-  from,
-  setFrom,
-  to,
-  setTo,
-  pageSize,
-  handlePageSizeChange,
+  filters: { section, order, from, to, searchTerm, pageSize },
+  setFilters,
 }: {
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-  section: string;
-  handleSectionChange: (value: string) => void;
-  order: string;
-  handleOrderChange: (value: string) => void;
-  from: Dayjs | null;
-  setFrom: (value: Dayjs | null) => void;
-  to: Dayjs | null;
-  setTo: (value: Dayjs | null) => void;
-  pageSize: string;
-  handlePageSizeChange: (value: string) => void;
+  filters: IFilters;
+  setFilters: React.Dispatch<React.SetStateAction<IFilters>>;
 }) {
   const { isLight } = useContext(ThemeContext);
   return (
@@ -45,7 +25,12 @@ export default function AllFilters({
       >
         <p className="font-semibold">Search the website for news</p>
         <div>
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={(value) => {
+              setFilters((prev) => ({ ...prev, searchTerm: value }));
+            }}
+          />
         </div>
       </div>
       <div
@@ -53,11 +38,37 @@ export default function AllFilters({
       >
         <p className="font-semibold">Filters</p>
         <div className="flex flex-wrap md:flex-nowrap gap-3">
-          <SectionPicker section={section} onChange={handleSectionChange} />
-          <OrderPicker order={order} onChange={handleOrderChange} />
-          <FromDatePicker from={from} setFrom={setFrom} />
-          <ToDatePicker from={from} to={to} setTo={setTo} />
-          <SelectPageSize pageSize={pageSize} onChange={handlePageSizeChange} />
+          <SectionPicker
+            section={section}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, section: value }));
+            }}
+          />
+          <OrderPicker
+            order={order}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, order: value }));
+            }}
+          />
+          <FromDatePicker
+            from={from}
+            setFrom={(value) => {
+              setFilters((prev) => ({ ...prev, from: value }));
+            }}
+          />
+          <ToDatePicker
+            from={from}
+            to={to}
+            setTo={(value) => {
+              setFilters((prev) => ({ ...prev, to: value }));
+            }}
+          />
+          <SelectPageSize
+            pageSize={pageSize}
+            onChange={(value) => {
+              setFilters((prev) => ({ ...prev, pageSize: value }));
+            }}
+          />
         </div>
       </div>
     </div>

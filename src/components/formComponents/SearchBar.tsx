@@ -9,20 +9,22 @@ export default function SearchBar({
   setSearchTerm: (term: string) => void;
 }) {
   const [localValue, setLocalValue] = useState(searchTerm);
-  
+
   useEffect(() => {
     setLocalValue(searchTerm);
   }, [searchTerm]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setSearchTerm(localValue);
+      if (localValue !== searchTerm) {
+        setSearchTerm(localValue);
+      }
     }, 300);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [localValue, setSearchTerm]);
+  }, [localValue, searchTerm, setSearchTerm]);
 
   return (
     <Input

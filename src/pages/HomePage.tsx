@@ -1,6 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
-import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import type { Dayjs } from "dayjs";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {
   LatestThreeNews,
@@ -12,21 +11,24 @@ import {
   AllFilters,
   ErrorHandlerActions,
 } from "@components";
-import type { Article, GuardianResponse } from "@types";
+import type { Article, GuardianResponse, IFilters } from "@types";
 import api from "@api";
 
-const selectArticles = (data: InfiniteData<GuardianResponse>) =>
-  data.pages.flatMap((page) => page.response.results);
+const initialState = {
+  from: null,
+  pageSize: "10",
+  searchTerm: "",
+  to: null,
+  section: "world",
+  order: "newest",
+};
 
 export default function HomePage() {
-  const [from, setFrom] = useState<Dayjs | null>(null);
-  const [pageSize, setPageSize] = useState<string>("10");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [to, setTo] = useState<Dayjs | null>(null);
-  const [section, setSection] = useState<string>("world");
-  const [order, setOrder] = useState<string>("newest");
+  const [filters, setFilters] = useState<IFilters>(initialState);
   const [savedSearches, setSavedSearches] = useState<string | null | "">("");
-
+  useEffect(() => {
+    console.log("filters changed", filters);
+  }, [filters]);
   const {
     data,
     error,
@@ -35,11 +37,19 @@ export default function HomePage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<GuardianResponse, Error, Article[]>({
-    queryKey: ["articles", section, order, from, to, searchTerm, pageSize],
+  } = useInfiniteQuery<GuardianResponse>({
+    queryKey: [
+      "articles",
+      filters.section,
+      filters.order,
+      filters.from?.format("YYYY-MM-DD") || null,
+      filters.to?.format("YYYY-MM-DD") || null,
+      filters.searchTerm,
+      filters.pageSize,
+    ],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await api.get(
-        `search?q=${encodeURIComponent(searchTerm)}&section=${section}&show-fields=body,headline,byline,thumbnail&order-by=${order}${from ? `&from-date=${from.format("YYYY-MM-DD")}` : ""}${to ? `&to-date=${to.format("YYYY-MM-DD")}` : ""}&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=${pageSize}`,
+        `search?q=${encodeURIComponent(filters.searchTerm)}&section=${filters.section}&show-fields=body,headline,byline,thumbnail&order-by=${filters.order}${filters.from ? `&from-date=${filters.from.format("YYYY-MM-DD")}` : ""}${filters.to ? `&to-date=${filters.to.format("YYYY-MM-DD")}` : ""}&api-key=67a28272-3250-4204-b651-0a21af15a7d7&page=${pageParam}&page-size=${filters.pageSize}`,
       );
       return res.data;
     },
@@ -51,63 +61,58 @@ export default function HomePage() {
       return undefined;
     },
     retry: false,
-    select: selectArticles,
   });
-
   // useMemo
-  const firstThree = useMemo(() => data?.slice(0, 3), [data]);
-  const rest = useMemo(() => data?.slice(3), [data]);
+  const articles = useMemo(() => {
+    return data?.pages.flatMap((page) => page.response.results) ?? [];
+  }, [data]);
+  const firstThree = useMemo(() => articles.slice(0, 3), [articles]);
+  const rest = useMemo(() => articles.slice(3), [articles]);
   const savedSearchesOptions = useMemo(() => {
     const savedSearches = JSON.parse(
       localStorage.getItem("savedSearches") || "[]",
     );
-    return savedSearches.map(
-      (search: {
-        id: Date;
-        section: string;
-        order: string;
-        from: Dayjs | null;
-        to: Dayjs | null;
-        searchTerm: string;
-        pageSize: string;
-      }) => ({
-        value: JSON.stringify(search),
-        label: `Search for ${search.section}, ${search.order}, ${search.from ? `${search.from},` : ""} ${search.to ? `${search.to},` : ""} ${search.searchTerm ? `${search.searchTerm},` : ""} page size: ${search.pageSize}`,
-      }),
-    );
+    return savedSearches.map((search: IFilters) => ({
+      value: JSON.stringify(search),
+      label: `Search for ${search.section}, ${search.order}, ${search.from ? `${search.from},` : ""} ${search.to ? `${search.to},` : ""} ${search.searchTerm ? `${search.searchTerm},` : ""} page size: ${search.pageSize}`,
+    }));
   }, [savedSearches]);
 
   // useCallback
-  const handleSectionChange = useCallback((value: string) => {
-    setSection(value);
-  }, []);
-
-  const handleOrderChange = useCallback((value: string) => {
-    setOrder(value);
-  }, []);
-
-  const handlePageSizeChange = useCallback((value: string) => {
-    setPageSize(value);
+  const handleReset = useCallback(() => {
+    setFilters(initialState);
   }, []);
 
   const handleSavedSearchesChange = useCallback((value: string) => {
     setSavedSearches(value);
+
     if (value === "") {
-      setSection("world");
-      setOrder("newest");
-      setFrom(null);
-      setTo(null);
-      setSearchTerm("");
-      setPageSize("10");
+      setFilters((prev) => {
+        if (JSON.stringify(prev) === JSON.stringify(initialState)) {
+          return prev; // ❌ ne rerenderuj
+        }
+        return initialState;
+      });
       return;
     }
+
     const parsed = JSON.parse(value);
-    setSection(parsed.section);
-    setOrder(parsed.order);
-    setFrom(parsed.from ? dayjs(parsed.from) : null);
-    setTo(parsed.to ? dayjs(parsed.to) : null);
-    setSearchTerm(parsed.searchTerm);
-    setPageSize(parsed.pageSize);
+
+    const newFilters = {
+      section: parsed.section,
+      order: parsed.order,
+      from: parsed.from ? dayjs(parsed.from) : null,
+      to: parsed.to ? dayjs(parsed.to) : null,
+      searchTerm: parsed.searchTerm,
+      pageSize: parsed.pageSize,
+    };
+
+    setFilters((prev) => {
+      if (JSON.stringify(prev) === JSON.stringify(newFilters)) {
+        return prev;
+      }
+      return newFilters;
+    });
   }, []);
 
   const handleSavedSearchClick = useCallback(() => {
@@ -118,12 +123,12 @@ export default function HomePage() {
       ...currentSavedSearches,
       {
         id: Date.now(),
-        section,
-        order,
-        from: from ? from.format("YYYY-MM-DD") : null,
-        to: to ? to.format("YYYY-MM-DD") : null,
-        searchTerm,
-        pageSize,
+        section: filters.section,
+        order: filters.order,
+        from: filters.from ? filters.from.format("YYYY-MM-DD") : null,
+        to: filters.to ? filters.to.format("YYYY-MM-DD") : null,
+        searchTerm: filters.searchTerm,
+        pageSize: filters.pageSize,
       },
     ];
     localStorage.setItem("savedSearches", JSON.stringify(newSavedSearches));
@@ -132,22 +137,14 @@ export default function HomePage() {
       label: `Search for ${newSavedSearches[newSavedSearches.length - 1].section}, ${newSavedSearches[newSavedSearches.length - 1].order}, ${newSavedSearches[newSavedSearches.length - 1].from ? `${newSavedSearches[newSavedSearches.length - 1].from},` : ""} ${newSavedSearches[newSavedSearches.length - 1].to ? `${newSavedSearches[newSavedSearches.length - 1].to},` : ""} ${newSavedSearches[newSavedSearches.length - 1].searchTerm ? `${newSavedSearches[newSavedSearches.length - 1].searchTerm},` : ""} page size:${newSavedSearches[newSavedSearches.length - 1].pageSize}`,
     };
     setSavedSearches(nesto.value);
-  }, [section, order, from, to, searchTerm, pageSize]);
+  }, [filters]);
 
   const handleSavedSearchDelete = useCallback((searchOptionValue: string) => {
     const currentSavedSearches = JSON.parse(
       localStorage.getItem("savedSearches") || "[]",
     );
     const newSavedSearches = currentSavedSearches.filter(
-      (search: {
-        id: Date;
-        section: string;
-        order: string;
-        from: string | null;
-        to: string | null;
-        searchTerm: string;
-        pageSize: number;
-      }) => JSON.stringify(search) !== searchOptionValue,
+      (search: IFilters) => JSON.stringify(search) !== searchOptionValue,
     );
     localStorage.setItem("savedSearches", JSON.stringify(newSavedSearches));
     setSavedSearches((prev: string | null | "") => {
@@ -165,32 +162,9 @@ export default function HomePage() {
     <div className="w-full h-full pt-30">
       <TitleSections />
       <Divider />
-      <LatestThreeNews
-        items={firstThree}
-        handleOnClick={() => {
-          setSection("world");
-          setOrder("newest");
-          setFrom(null);
-          setTo(null);
-          setSearchTerm("");
-          setPageSize("10");
-        }}
-      />
+      <LatestThreeNews items={firstThree} handleOnClick={handleReset} />
       <Divider />
-      <AllFilters
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        section={section}
-        handleSectionChange={handleSectionChange}
-        order={order}
-        handleOrderChange={handleOrderChange}
-        from={from}
-        setFrom={setFrom}
-        to={to}
-        setTo={setTo}
-        pageSize={pageSize}
-        handlePageSizeChange={handlePageSizeChange}
-      />
+      <AllFilters filters={filters} setFilters={setFilters} />
       <SavedSearchesActions
         savedSearches={savedSearches}
         savedSearchesOptions={savedSearchesOptions}

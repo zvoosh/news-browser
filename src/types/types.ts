@@ -1,3 +1,5 @@
+import type { Dayjs } from "dayjs";
+
 export interface IBookmark {
   id: string;
   webUrl: string;
@@ -8,6 +10,16 @@ export interface IBookmark {
     body: string;
     byline?: string;
   };
+}
+
+export interface IFilters {
+  id?: Date;
+  section: string;
+  order: string;
+  from: Dayjs | null;
+  to: Dayjs | null;
+  searchTerm: string;
+  pageSize: string;
 }
 
 export interface ArticleFields {

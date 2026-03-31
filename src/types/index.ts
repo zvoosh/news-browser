@@ -1,1 +1,1 @@
-export type { ArticleFields, Article, GuardianResponse, IBookmark } from "./types";
+export type { ArticleFields, Article, GuardianResponse, IBookmark, IFilters } from "./types";
