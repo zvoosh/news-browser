@@ -38,7 +38,7 @@ export default function HomePage() {
     data,
     error,
     isError,
-    isFetching,
+    isLoading,
     refetch,
     fetchNextPage,
     hasNextPage,
@@ -159,7 +159,7 @@ export default function HomePage() {
     });
   }, []);
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <div className="mt-40 flex justify-center">
         <Spin size="large" />

@@ -19,7 +19,7 @@ export default function SearchBar({
       if (localValue !== searchTerm) {
         setSearchTerm(localValue);
       }
-    }, 300);
+    }, 675);
 
     return () => {
       clearTimeout(handler);
